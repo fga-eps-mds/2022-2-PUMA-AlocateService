@@ -1,0 +1,35 @@
+version: "3"
+services:
+    db-alocate-test:
+        image: postgres
+        container_name: db-alocate-test
+        environment:
+            POSTGRES_PASSWORD: ${DB_PASS}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_DB: ${DB}
+            DATABASE_URL: ${DB_URL_TEST}
+        volumes:
+            - ./dbdata:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        networks:
+            - puma-network
+    alocate-service-test:
+        container_name: alocate-service-test
+        environment:
+            ENVIRONMENT: alocate-test
+        build:
+            context: ../${ALOCATE_PATH}/
+            dockerfile: test.service.Dockerfile
+        ports:
+            - "3002:3002"
+        depends_on:
+            - db-alocate-test
+        volumes:
+            - ../${ALOCATE_PATH}:/app
+            - /app/node_modules
+        networks:
+            - puma-network
+
+networks:
+    puma-network:
