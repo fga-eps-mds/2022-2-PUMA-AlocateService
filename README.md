@@ -30,3 +30,13 @@ Para encerrar os containers de desenvolvimento execute:
 ``` $ make down ```
 
 É necessário preencher o arquivo .env na raiz com as informações necessárias.
+
+### Testes
+
+Para rodar os testes, execute:
+
+``` $ sudo make test```
+
+``` $ sudo make test-debug```
+
+É necessário preencher o arquivo .env na raiz com as informações necessárias.
