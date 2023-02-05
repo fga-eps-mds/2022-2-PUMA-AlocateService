@@ -1,0 +1,35 @@
+version: "3"
+services:
+    db-alocate-dev:
+        image: postgres
+        container_name: db-alocate-dev
+        environment:
+            POSTGRES_PASSWORD: ${DB_PASS}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_DB: ${DB}
+            DATABASE_URL: ${DB_URL_DEV}
+        volumes:
+            - ./dbdata:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        networks:
+            - puma-network
+    alocate-service-dev:
+        container_name: alocate-service-dev
+        environment:
+            ENVIRONMENT: alocate-dev
+        build:
+            context: ../${ALOCATE_PATH}/
+            dockerfile: dev.service.Dockerfile
+        ports:
+            - "3002:3002"
+        depends_on:
+            - db-alocate-dev
+        volumes:
+            - ../${ALOCATE_PATH}:/app
+            - /app/node_modules
+        networks:
+            - puma-network
+
+networks:
+    puma-network:
